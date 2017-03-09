@@ -13,7 +13,6 @@ const
   LogFilePath = '/var/log/mydaemon.log';
 
 var
-  { vars for daemonizing }
   bTerm : boolean;
   aOld,
   aTerm: pSigActionRec;
@@ -47,25 +46,19 @@ var
   F: TextFile;
   CurrentSecond: Byte;
 begin
-  //WriteLn('Демон запущен');
-  //Halt(0);
-
   {$hints off}
     fpSigEmptySet(ZeroSigs);
   {$hints on}
 
-  { set global daemon booleans }
   bTerm := False;
 
-  { block all signals except -TERM }
   sSet := $ffffbffe;
   ps1 := @sSet;
   fpSigProcMask(sig_block, ps1, nil);
 
-  { setup the signal handlers }
   New(aOld);
   New(aTerm);
-  aTerm^.sa_handler{.sh} := SigactionHandler(@DoSig);
+  aTerm^.sa_handler := SigactionHandler(@DoSig);
 
   aTerm^.sa_mask := ZeroSigs;
   aTerm^.sa_flags := 0;
