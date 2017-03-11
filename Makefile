@@ -24,10 +24,6 @@ clean:
 install:
 	install $(OUT)/mydaemon $(BIN)/$(TARGET)
 	update-rc.d $(TARGET) defaults
-#	touch $(AUTOSTART)
-#	echo '#!/bin/sh' > $(AUTOSTART)
-#	echo "$(BIN)/$(TARGET) start" >> $(AUTOSTART)
-#	chmod +x $(AUTOSTART)
 
 uninstall:
 	rm -rf $(BIN)/$(TARGET)
