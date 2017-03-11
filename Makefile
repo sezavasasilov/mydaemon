@@ -2,9 +2,11 @@ TMP = ./tmp
 OUT = ./out
 SRC = ./src
 FLAGS = -FE$(OUT) -FU$(TMP)
-BIN = /usr/local/bin
+BIN = /etc/init.d
 LOG = /var/log
-PID = /run
+PID = /var/run
+TARGET = mydaemon
+AUTOSTART = /etc/rc2.d/S[0-9][0-9]$(TARGET)
 
 .PHONY: all clean install uninstall
 
@@ -20,9 +22,15 @@ clean:
 	rm -rf $(TMP)
 
 install:
-	install $(OUT)/mydaemon $(PREFIX)/mydaemon
+	install $(OUT)/mydaemon $(BIN)/$(TARGET)
+	update-rc.d $(TARGET) defaults
+#	touch $(AUTOSTART)
+#	echo '#!/bin/sh' > $(AUTOSTART)
+#	echo "$(BIN)/$(TARGET) start" >> $(AUTOSTART)
+#	chmod +x $(AUTOSTART)
 
 uninstall:
-	rm -rf $(PREFIX)/mydaemon
+	rm -rf $(BIN)/$(TARGET)
 	rm -rf $(LOG)/mydaemon.log
-	rm -rf $(PID)/mydaemon
+	rm -rf $(PID)/mydaemon.pid
+	update-rc.d $(TARGET) remove
